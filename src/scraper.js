@@ -127,7 +127,7 @@ async function download(manga, manga_name){
         throw new Error('Invalid image type');
     }
     console.log(manga.order);
-    let command = `curl -o temp/manga/${manga_name}/${manga.order}${extension}  '${manga.manga}'`;
+    let command = `curl -o temp/manga/${manga_name}/${manga.order}${extension}  ${manga.manga}`;
     console.log(command);
     let result = cp.execSync(command);
 }

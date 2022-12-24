@@ -89,6 +89,7 @@ main.manga-main {
 .manga img {
     height: 300px;
     object-fit: cover;
+    border-radius: 3%;
 }
 
 .container{
@@ -166,6 +167,7 @@ main.manga-main {
 .manga-index img {
     height: 15em;
     transition: all .2s ease-in-out;
+    border-radius: 3%;
 }
 .manga-index:hover{
     transition: all .2s ease-in-out;

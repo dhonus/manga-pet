@@ -5,7 +5,8 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet')
 const app = express();
 const {sendEmail} = require("./src/mail");
-
+const fs = require('fs');
+const cp = require('child_process');
 // default credentials to overwrite on open
 let gmail = "";
 let pass = "";
@@ -33,10 +34,21 @@ app.engine('html', ejs.renderFile);
 app.set('view engine', 'ejs');
 app.set('views', __dirname);
 
+// create necessary files
+fs.appendFile("./.cred", '', function (err) {
+    if (err) throw err;
+});
+
 // home page
+const logfile = './temp/manga_out/log.manga';
 app.get('/', (req, res) => {
     let recents = [];
     let info = "";
+    fs.mkdirSync('./temp/manga_out', { recursive: true });
+    fs.appendFile(logfile, '', function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
     if (fs.readFileSync(logfile, 'utf8').length === 0) {
         console.log("No recent manga.");
         info = "No recent manga.";
@@ -65,7 +77,6 @@ app.get('/', (req, res) => {
 })
 
 
-const logfile = './temp/manga_out/log.manga';
 
 app.post('/search', async function (req, res) {
     console.log("we are here");
@@ -94,9 +105,6 @@ app.post('/search', async function (req, res) {
 
 
 
-const cp = require('child_process');
-const fs = require('fs');
-
 let getCover = async function(uri, filename){
     try {
         await fs.rmSync('temp/image', { recursive: true });
@@ -104,7 +112,7 @@ let getCover = async function(uri, filename){
         console.log("Probably no temp/image folder. This should be fine.");
     }
     fs.mkdirSync('temp/image', { recursive: true });
-    let command = `curl -o temp/image/${filename}  '${uri}'`;
+    let command = `curl -o temp/image/${filename}  ${uri}`;
     let result = cp.execSync(command);
 };
 
@@ -123,6 +131,7 @@ app.get('/profile', async function (req, res) {
                 fs.mkdirSync('./temp/manga/image', { recursive: true });
                 fs.copyFileSync('./temp/image/cover.jpg', './temp/manga/image/' + link + '.jpg');
                 manga = await scrapeMangaProfile('https://kissmanga.org/manga/' + link);
+                console.log("oki");
                 break;
             }
             default:{
@@ -253,12 +262,6 @@ app.post('/settings_set', async function (req, res) {
 
     // if all are not empty and valid
     if (gmail && pass && kindle) {
-        // if file doesnt exist, create it
-        await fs.appendFile("./.cred", '', function (err) {
-            if (err) throw err;
-            console.log('Saved!');
-        });
-
         // if empty
         if (fs.readFileSync("./.cred", 'utf8').length === 0) {
             // write to file
@@ -297,7 +300,7 @@ app.get('/progress', function (req, res) {
     res.send({'progress': getProgress()});
 });
 
-function getCreds() {
+async function getCreds() {
     // read the first line of the file
     const data = fs.readFileSync("./.cred", 'utf8');
 
@@ -309,9 +312,9 @@ function getCreds() {
     return {'gmail': parts[0], 'pass': parts[1], 'kindle': parts[2]};
 }
 
-app.get('/settings', function (req, res) {
+app.get('/settings', async function (req, res) {
 
-    const creds = getCreds();
+    const creds = await getCreds();
     res.render("settings", {
         'message': message,
         'gmail': creds.gmail,
