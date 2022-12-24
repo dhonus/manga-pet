@@ -1,13 +1,15 @@
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    icon: 'src/256x256'
+  },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       "config": {
         "name": "MangaPet",
-        "icon": "./src/256x256.ico",
-        "setupIcon": "./src/256x256.ico"
+        "iconUrl": "https://raw.githubusercontent.com/dhonus/manga-pet/main/src/256x256.ico",
+        "setupIcon": "src/256x256.ico"
       }
     },
     {
