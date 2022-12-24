@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>manga.pet.</title>
+  </head>
+  <body>
+  <header>
+    <div>
+      <div>
+        <a href="/">
+          <div class="left">
+            <img class="logo" src="src/256x256.png">
+            <h1>manga.pet.</h1>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="nav">
+      <a href="/"><img src="src/home.svg" class="cog"/></a>
+      <a href="/settings"><img src="src/cog.svg" class="cog"/></a>
+    </div>
+  </header>
+    <main>
+      <h2 class="message"><%= message %></h2>
+      <form action="/settings_set" method="POST" class="settings">
+        <p>manga.pet. uses your gmail address to send manga to your kindle.</p>
+        <h4>Your gmail address</h4>
+        <input  type="text" name="gmail" placeholder="me@gmail.com" value="<%= gmail %>"/>
+        <h4>Your gmail app password</h4>
+        <input  type="text" name="pass" placeholder="xxxxxxxxxxxxxxxx" value="<%= pass %>"/>
+        <h4>Your kindle email address</h4>
+        <input  type="text" name="kindle" placeholder="awesomekindle@kindle.com" value="<%= kindle %>"/>
+        <button type="submit" value="OK">Save</button>
+      </form>
+    </main>
+
+  <footer>
+    <p>© <%= new Date().getFullYear() %> manga.pet.</p>
+    <p>manga.pet. is Free Software, licensed under the GNU General Public License v3.0.</p>
+    <p>manga.pet. is not responsible, or affiliated with any of the sites it indexes. Manga is property of their respective owners.</p>
+    We are using Node.js <span id="node-version"></span>,
+    Chromium <span id="chrome-version"></span>,
+    and Electron <span id="electron-version"></span>.
+  </footer>
+  </body>
+</html>

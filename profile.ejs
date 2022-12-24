@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>manga.pet.</title>
+  </head>
+  <body>
+  <div id="loading" class="loading hidden">
+    <div class="loading__inner">
+      <div class="loading__text"><h3>Downloading and sending</h3><p>This might take a second...</p></div>
+      <div class="loading__bar"></div>
+    </div>
+  </div>
+  <header>
+    <div>
+      <div>
+        <a href="/">
+          <div class="left">
+            <img class="logo" src="src/256x256.png">
+            <h1>manga.pet.</h1>
+          </div>
+        </a>
+        <form action="/search" method="POST">
+          <input
+                  type="text"
+                  name="manga"
+                  placeholder="Search for manga" />
+          <button type="submit" value="OK">Search</button>
+        </form>
+      </div>
+    </div>
+    <div class="nav">
+      <a href="/"><img src="src/home.svg" class="cog"/></a>
+      <a href="/settings"><img src="src/cog.svg" class="cog"/></a>
+    </div>
+  </header>
+    <main class="manga-main">
+      <div class="manga">
+        <div class="manga-summary">
+          <h1><%= manga.title %></h1>
+          <p><%= manga.summary %></p>
+          <div class="chapters">
+            <h2>Chapters</h2>
+            <button>Send selected</button>
+            <% for (var i = 0; i < manga.chapters.length; i++) { %>
+              <div class="manga-link">
+                <input type="checkbox" id="check-<%= i %>">
+                <a class="manga-link-a" href="/download?type=<%= manga.type %>&short=<%= manga.chapters[i].link %>&title=<%= manga.chapters[i].chapter %>">
+                  <h4><%= manga.chapters[i].chapter %></h4>
+                </a>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        <img src="temp/image/cover.jpg"/>
+      </div>
+    </main>
+  <hr>
+  <footer>
+    <p>© <%= new Date().getFullYear() %> manga.pet.</p>
+    <p>manga.pet. is Free Software, licensed under the GNU General Public License v3.0.</p>
+    <p>manga.pet. is not responsible, or affiliated with any of the sites it indexes. Manga is property of their respective owners.</p>
+    We are using Node.js <span id="node-version"></span>,
+    Chromium <span id="chrome-version"></span>,
+    and Electron <span id="electron-version"></span>.
+  </footer>
+  <script src="client.js"></script>
+  </body>
+</html>

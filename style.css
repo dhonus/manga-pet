@@ -1,0 +1,239 @@
+@font-face {
+    font-family: 'Quicksand';
+    url('./src/quicksand.ttf') format('truetype');
+}
+body{
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 1rem;
+    font-family: 'Quicksand', sans-serif;
+    width: 80%;
+    margin: 0 auto;
+}
+input{
+    line-height: 1.6rem;
+    font-size: 1.4rem;
+    border: 1px solid transparent!important;
+    background: #1f1f1f;
+    color: white;
+    outline: 1px solid transparent!important;
+    border-radius: 7px;
+    padding: .3rem;
+    transition: all .2s ease-in-out;
+    font-family: 'Quicksand', sans-serif;
+}
+input:focus, button:hover{
+    border: 1px solid #1f1f1f!important;
+    outline: 1px solid #1f1f1f!important;
+    background: #333333;
+    color: white;
+    transition: all .2s ease-in-out;
+}
+textarea:focus, input:focus{
+    background: #282828;
+    outline: 1px solid #d9d9d9;
+    transition: all .2s ease-in-out;
+}
+
+button {
+    line-height: 1.6rem;
+    font-size: 1.4rem;
+    border: 1px solid transparent;
+    background: #1f1f1f;
+    color: white;
+    outline: 1px solid transparent;
+    border-radius: 7px;
+    padding: .3rem;
+    font-family: 'Quicksand', sans-serif;
+    transition: all .2s ease-in-out;
+}
+
+a {
+    color: aquamarine;
+}
+
+.manga-link {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    line-height: 0;
+}
+.manga-link input {
+    border: none;
+    outline: none;
+}
+
+main.manga-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: left;
+    margin: 0 auto;
+    gap: 1rem;
+}
+
+.manga {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    flex: 3;
+}
+
+.manga-summary {
+    display: flex;
+    flex-direction: column;
+}
+.manga-summary p{
+    font-size: 1.3rem;
+}
+.manga img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.container{
+    height: 256px;
+    position: relative;
+}
+.inner{
+    height: 100%;
+    overflow: scroll;
+}
+.full-height{
+    position: absolute;
+    left: 0;
+    width: 20%;
+    top: 0;
+    height: 100%;
+}
+
+.loadinga{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background: black;
+    padding: 1rem 2rem;
+    width: 100px; /* Need a specific value to work */
+}
+
+.loading {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    left: 0;
+    justify-content: center;
+}
+.loading__inner {
+    background-color: #262626;
+    width: 40%;
+    min-width: 390px;
+    height: auto;
+    position: fixed;
+    margin: 0;
+    padding: 1rem 2rem;
+    display: flex;
+}
+.hidden
+{
+    display: none;
+}
+
+
+.manga-index-all{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    justify-content: left;
+}
+.manga-index{
+    display: flex;
+    transition: all .2s ease-in-out;
+}
+.manga-index:hover{
+    opacity: 0.7;
+}
+
+.manga-index img {
+    height: 15em;
+    transition: all .2s ease-in-out;
+}
+.manga-index:hover{
+    transition: all .2s ease-in-out;
+    box-shadow: -15px 15px 50px rgba(0, 0, 0, .3);
+    transform-origin: left top;
+    transform: perspective(1000px) rotateX(10deg) rotateY(10deg) rotateZ(-2deg);
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    vertical-align: center;
+    margin-bottom: 2rem;
+}
+header .left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+header img.cog {
+    height: 2rem;
+    font-size: 2em;
+    margin-block-start: 1.6rem;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+header .logo{
+    height: 4rem;
+}
+header a {
+    text-decoration: none;
+}
+header a:hover {
+    text-decoration: underline;
+}
+.top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.nav {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+footer {
+    margin-top: 2rem;
+    color: #818181;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0 auto;
+    width: 80%;
+}
+.settings h4{
+    margin: 0;
+}
+
+.message {
+    color: aquamarine;
+}
