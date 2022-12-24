@@ -16,6 +16,17 @@ Before you start using manga.pet. you should:
 * whitelist your gmail address in your amazon account [guide](https://www.amazon.com/gp/help/customer/display.html?nodeId=GX9XLEVV8G4DB28H).
   * otherwise your kindle won't accept the email
 
+## Installation
+Install all dependencies with npm  
+> npm install
+
+Run the app with
+> npm start
+
+Or using yarn
+> yarn start
+
+The project is also set up with electron forge.
 
 ![Main](screenshots/main.png)
 ![Manga](screenshots/manga.png)

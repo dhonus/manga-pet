@@ -15,25 +15,23 @@
     "@electron-forge/cli": "^6.0.4",
     "@electron-forge/maker-deb": "^6.0.4",
     "@electron-forge/maker-flatpak": "^6.0.4",
-    "@electron-forge/maker-rpm": "^6.0.4",
     "@electron-forge/maker-squirrel": "^6.0.4",
     "@electron-forge/maker-zip": "^6.0.4",
     "@types/nodemailer": "^6.4.7",
     "electron": "^22.0.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1279.0",
     "body-parser": "^1.20.1",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "ejs": "^3.1.8",
     "electron-squirrel-startup": "^1.0.0",
-    "epub-gen": "^0.1.0",
     "express": "^4.18.2",
     "helmet": "^6.0.1",
-    "image-downloader": "^4.3.0",
     "nodemailer": "^6.8.0",
     "nodepub": "^3.0.8",
-    "request-promise": "^4.2.6"
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "yarn": "^1.22.19"
   }
 }

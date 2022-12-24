@@ -7,6 +7,7 @@ const app = express();
 const {sendEmail} = require("./src/mail");
 const fs = require('fs');
 const cp = require('child_process');
+
 // default credentials to overwrite on open
 let gmail = "";
 let pass = "";
@@ -38,17 +39,18 @@ app.set('views', __dirname);
 fs.appendFile("./.cred", '', function (err) {
     if (err) throw err;
 });
+fs.mkdirSync('./temp/manga_out', { recursive: true });
+const logfile = './temp/manga_out/log.manga';
+fs.appendFile(logfile, '', function (err) {
+    if (err) throw err;
+    console.log('Saved!');
+});
 
 // home page
-const logfile = './temp/manga_out/log.manga';
 app.get('/', (req, res) => {
     let recents = [];
     let info = "";
-    fs.mkdirSync('./temp/manga_out', { recursive: true });
-    fs.appendFile(logfile, '', function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
+
     if (fs.readFileSync(logfile, 'utf8').length === 0) {
         console.log("No recent manga.");
         info = "No recent manga.";
