@@ -182,10 +182,15 @@ async function convertToEpub(chapter_title, chapters) {
         epub.addSection('Chapter ' + i, '<img src="../images/' + img[i] + '"/>');
     }
 
-    const file_out = manga.title + " " + chapter_title;
+    // a better regex might be a good idea here
+    // fixes the output string in case a strange char is in there
+    let file_out = manga.title + " " + chapter_title;
+    file_out = file_out.replace(/ /g,"_");
+    file_out = file_out.replace(/\W/g, '')
+    file_out = file_out.replace(/_/g," ");
     await epub.writeEPUB("./temp/manga_out/", file_out);
 
-    // if file doesnt exist, create it
+    // if file doesn't exist, create it
     fs.appendFile(logfile, '', function (err) {
         if (err) throw err;
         console.log('Saved!');
