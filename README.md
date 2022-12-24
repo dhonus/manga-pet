@@ -17,7 +17,9 @@ Before you start using manga.pet. you should:
   * otherwise your kindle won't accept the email
 
 ## Installation
-Install all dependencies with npm  
+You can opt to use the prebuilt windows binary in `out/make/squirrel.windows/x64`. Simply run the .exe file.
+
+If you wish to prepare the binary yourself, install all dependencies with npm  
 > npm install
 
 Run the app with
