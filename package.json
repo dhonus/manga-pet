@@ -1,6 +1,6 @@
 {
   "name": "manga-pet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Download and send manga directly to your kindle",
   "main": "main.js",
   "scripts": {

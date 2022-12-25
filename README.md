@@ -18,7 +18,7 @@ Before you start using manga.pet. you should:
   * otherwise your kindle won't accept the email
 
 ## Installation
-You can opt to use the prebuilt windows binary in `out/make/squirrel.windows/x64`. Simply run the .exe file.
+You can opt to use the prebuilt windows binary in the releases section.
 
 If you wish to prepare the binary yourself, install all dependencies with npm  
 > npm install
@@ -28,6 +28,11 @@ Run the app with
 
 Or using yarn
 > yarn start
+
+To build execute
+> yarn dist
+
+The installer will be generated into the dist directory.
 
 The project is also set up with electron forge.
 
