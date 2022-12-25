@@ -109,12 +109,12 @@ app.post('/search', async function (req, res) {
 
 let getCover = async function(uri, filename){
     try {
-        await fs.rmSync('temp/image', { recursive: true });
+        await fs.rmSync('./temp/image', { recursive: true });
     } catch (e) {
         console.log("Probably no temp/image folder. This should be fine.");
     }
-    fs.mkdirSync('temp/image', { recursive: true });
-    let command = `curl -o temp/image/${filename}  ${uri}`;
+    fs.mkdirSync('./temp/image', { recursive: true });
+    let command = `curl -o ./temp/image/${filename}  ${uri}`;
     let result = cp.execSync(command);
 };
 

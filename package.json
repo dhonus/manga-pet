@@ -1,6 +1,6 @@
 {
   "name": "manga-pet",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Download and send manga directly to your kindle",
   "main": "main.js",
   "scripts": {
@@ -43,6 +43,9 @@
     "mac": {
       "category": "mangapet.media.manga"
     },
-    "icon": "./src/256x256.ico"
+    "icon": "./src/256x256.ico",
+    "extraResources": [
+      "temp"
+    ]
   }
 }
