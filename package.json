@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "author": "Daniel Honus",
   "license": "GPL-3.0-or-later",
@@ -18,7 +20,9 @@
     "@electron-forge/maker-squirrel": "^6.0.4",
     "@electron-forge/maker-zip": "^6.0.4",
     "@types/nodemailer": "^6.4.7",
-    "electron": "^22.0.0"
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0",
+    "electron-builder-squirrel-windows": "^24.0.0-alpha.8"
   },
   "dependencies": {
     "body-parser": "^1.20.1",
@@ -33,5 +37,12 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "yarn": "^1.22.19"
+  },
+  "build": {
+    "appId": "com.electron.manga-pet",
+    "mac": {
+      "category": "mangapet.media.manga"
+    },
+    "icon": "./src/256x256.ico"
   }
 }
