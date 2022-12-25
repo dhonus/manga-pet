@@ -11,7 +11,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "author": "Daniel Honus",
+  "author": "Daniel Honus <dhonus@tuta.io>",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.4",
@@ -39,9 +39,19 @@
     "yarn": "^1.22.19"
   },
   "build": {
-    "appId": "com.electron.manga-pet",
+    "appId": "manga-pet",
     "mac": {
       "category": "mangapet.media.manga"
+    },
+    "linux": {
+      "target": "pacman",
+      "category": "AudioVideo",
+      "icon": "./src/256x256.png",
+      "desktop": {
+        "MimeType": "application/x-manga-pet",
+        "StartupWMClass": "manga-pet",
+        "icon": "manga-pet"
+      }
     },
     "icon": "./src/256x256.ico",
     "files": [
