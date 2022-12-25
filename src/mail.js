@@ -10,6 +10,7 @@ const {response} = require("express");
 const {getCreds} = require("../app");
 let ex_app = express();
 const net = require('net');
+const {app} = require("electron");
 
 // enable cors
 ex_app.use(cors());
@@ -17,9 +18,8 @@ ex_app.options('*', cors());
 
 
 //let server = http.createServer(ex_app);
-let port = 49200;
+const userData = app.getPath("userData")
 
-ex_app.set("port", port);
 ex_app.use(express.json);
 ex_app.use(express.urlencoded({extended: true}));
 
@@ -40,6 +40,8 @@ async function sendEmail(file) {
 
     const creds = await getCreds();
 
+    console.log(creds, userData, ":p")
+
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
@@ -52,7 +54,7 @@ async function sendEmail(file) {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-        from: '"manga.pet.👻" ' + creds.gmail, // sender address
+        from: '"manga.pet." ' + creds.gmail, // sender address
         to: creds.kindle,
         subject: "",
         text: "",
@@ -60,12 +62,12 @@ async function sendEmail(file) {
         attachments: [
             {
                 filename: file + ".epub",
-                path: './temp/manga_out/' + file + '.epub',
+                path: userData + '/temp/manga_out/' + file + '.epub',
             }
         ]
     });
 
-    console.log('./temp/manga_out/' + file + '.epub');
+    console.log(userData + '/temp/manga_out/' + file + '.epub');
     console.log("Message sent: %s", info.messageId);
 }
 

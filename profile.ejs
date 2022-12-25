@@ -10,7 +10,7 @@
   <body>
   <div id="loading" class="loading hidden">
     <div class="loading__inner">
-      <div class="loading__text"><h3>Downloading and sending</h3><p>This might take a second...</p></div>
+      <div class="loading__text"><h3>Downloading and sending</h3><p>This might take a second... Do not close the window while processing.</p></div>
       <div class="loading__bar"></div>
     </div>
   </div>
@@ -38,6 +38,7 @@
     </div>
   </header>
     <main class="manga-main">
+      <h2 class="message"><%= message %></h2>
       <div class="manga">
         <div class="manga-summary">
           <h1><%= manga.title %></h1>
@@ -58,7 +59,6 @@
         <img src="atom://<%= userData %>/temp/image/cover.jpg"/>
       </div>
     </main>
-  <hr>
   <footer>
     <p>© <%= new Date().getFullYear() %> manga.pet.</p>
     <p>manga.pet. is Free Software, licensed under the GNU General Public License v3.0.</p>

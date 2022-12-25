@@ -66,11 +66,9 @@ a {
 
 main.manga-main {
     display: flex;
-    flex-direction: column;
     align-items: flex-start;
     justify-content: left;
     margin: 0 auto;
-    gap: 1rem;
 }
 
 .manga {
@@ -86,6 +84,9 @@ main.manga-main {
 }
 .manga-summary p{
     font-size: 1.3rem;
+}
+.manga-summary h1 {
+    margin-top: 0;
 }
 .manga img {
     height: 300px;

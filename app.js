@@ -70,7 +70,8 @@ ex_app.get('/', (req, res) => {
     res.render("index",{
         'info': info,
         'message': message,
-        recents: recents
+        recents: recents,
+        'userData': userData
     });
 })
 
@@ -142,7 +143,7 @@ ex_app.get('/profile', async function (req, res) {
     }
 
     console.log(manga, "manga");
-    res.render("profile", {'manga': manga, 'userData': userData});
+    res.render("profile", {'manga': manga, 'userData': userData, 'message': message});
 });
 
 // DOWNLOADING MANGA
@@ -237,8 +238,10 @@ ex_app.get('/download', async function (req, res) {
             const file = await convertToEpub(chapter_title);
             console.log(file, " is the file");
             await sendEmail(file).then(() => {
+                message = "The chapter" + chapter_title +" has been sent to your kindle.";
                 console.log("Email sent");
             }).catch((error) => {
+                message = "There was an error with " + chapter_title + ". Err: " + error;
                 console.log(error);
             });
         }
@@ -247,7 +250,8 @@ ex_app.get('/download', async function (req, res) {
     }
 
     console.log(type, link);
-    res.render("profile", {'manga': manga});
+    res.render("profile", {'manga': manga, 'userData': userData, 'message': message});
+    message = "";
 });
 
 ex_app.post('/settings_set', async function (req, res) {
@@ -266,22 +270,22 @@ ex_app.post('/settings_set', async function (req, res) {
     // if all are not empty and valid
     if (gmail && pass && kindle) {
         // if empty
-        if (fs.readFileSync("./.cred", 'utf8').length === 0) {
+        if (fs.readFileSync(userData + "/.cred", 'utf8').length === 0) {
             // write to file
-            await fs.appendFile("./.cred", gmail + "," + pass + "," + kindle + "\n", function (err) {
+            await fs.appendFile(userData + "/.cred", gmail + "," + pass + "," + kindle + "\n", function (err) {
                 if (err) throw err;
                 console.log('Updated!');
             });
         } else {
             // delete file
-            await fs.unlinkSync("./.cred");
+            await fs.unlinkSync(userData + "/.cred");
             // create empty
-            await fs.appendFile("./.cred", '', function (err) {
+            await fs.appendFile(userData + "/.cred", '', function (err) {
                 if (err) throw err;
                 console.log('Saved!');
             });
             // write creds to file
-            await fs.appendFile("./.cred", gmail + "," + pass + "," + kindle + "\n", function (err) {
+            await fs.appendFile(userData + "/.cred", gmail + "," + pass + "," + kindle + "\n", function (err) {
                 if (err) throw err;
                 console.log('Updated!');
             });
@@ -305,7 +309,7 @@ ex_app.get('/progress', function (req, res) {
 
 async function getCreds() {
     // read the first line of the file
-    const data = fs.readFileSync("./.cred", 'utf8');
+    const data = fs.readFileSync(userData + "/.cred", 'utf8');
 
     // split the contents by new line
     const lines = data.split(/\r?\n/);

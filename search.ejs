@@ -32,6 +32,12 @@
     </div>
   </header>
     <h1>Search results</h1>
+      <% if (results.length === 0) { %>
+        <div class="manga-result">
+          <h2>No manga found.</h2>
+          <p>Perhaps you mistyped the manga. Sometimes it helps to search in the other language (English/Japanese)</p>
+        </div>
+      <% } else { %>
       <% for (var i = 0; i < results.length; i++) { %>
         <div class="manga-result">
           <a href="/profile<%= results[i].link %>">
@@ -39,7 +45,8 @@
           </a>
         </div>
       <% } %>
-    <hr>
+    <% } %>
+
   <footer>
     <p>© <%= new Date().getFullYear() %> manga.pet.</p>
     <p>manga.pet. is Free Software, licensed under the GNU General Public License v3.0.</p>
