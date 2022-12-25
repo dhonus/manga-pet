@@ -179,7 +179,7 @@ async function convertToEpub(chapter_title, chapters) {
     let epub = nodepub.document(metadata);
     for (let i = 0; i < img.length; i++) {
         let  adding =
-        epub.addSection('Chapter ' + i, '<img src="../images/' + img[i] + '"/>');
+        epub.addSection('Chapter ' + i, '<img src="../images/' + i + '.jpg"/>');
     }
 
     // a better regex might be a good idea here

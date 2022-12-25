@@ -1,6 +1,7 @@
 @font-face {
     font-family: 'Quicksand';
-    url('./src/quicksand.ttf') format('truetype');
+    src: url('./src/quicksand.ttf') format('truetype'),
+    url('./src/quicksand.woff') format('woff');
 }
 body{
     background-color: #1a1a1a;
