@@ -24,7 +24,7 @@ app.use(
 app.disable('cross-origin-embedder-policy');
 
 // basic networking setup and includes
-const port = 3001;
+
 const ejs = require('ejs');
 const {scrapeMangaProfile, scrapeMangaSearch, scrapeMangaChapter, getProgress} = require("./src/scraper");
 
@@ -332,9 +332,9 @@ app.get('/settings', async function (req, res) {
 });
 
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+const server = app.listen(0, () => {
+    console.log('Running client on port:', server.address().port);
 })
 
-
+let port = server.address().port
 module.exports = {port, getCreds};
