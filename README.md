@@ -13,6 +13,7 @@ All with just a few clicks.
 Before you start using manga.pet. you should:
 * set up your gmail credentials in the settings
   * you will have to create an app password for your gmail [guide](https://support.google.com/accounts/answer/185833?hl=en)
+  * as this will put all of your emails behind an insecure app password, I HIGHLY recommend creating a separate google account to use this tool with
 * whitelist your gmail address in your amazon account [guide](https://www.amazon.com/gp/help/customer/display.html?nodeId=GX9XLEVV8G4DB28H).
   * otherwise your kindle won't accept the email
 
