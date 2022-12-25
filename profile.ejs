@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="img-src * atom: data:; default-src 'self'; script-src 'self'">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="src/style.css">
     <title>manga.pet.</title>
   </head>
   <body>
@@ -56,7 +56,7 @@
             <% } %>
           </div>
         </div>
-        <img src="atom://<%= userData %>/temp/image/cover.jpg"/>
+        <img src="atom://<%= userData %>/temp/manga/image/<%=manga.short%>.jpg"/>
       </div>
     </main>
   <footer>
@@ -67,6 +67,6 @@
     Chromium <span id="chrome-version"></span>,
     and Electron <span id="electron-version"></span>.
   </footer>
-  <script src="client.js"></script>
+  <script src="src/client.js"></script>
   </body>
 </html>

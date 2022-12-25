@@ -110,9 +110,9 @@ let getCover = async function(uri, filename){
     } catch (e) {
         console.log("Probably no temp/image folder. This should be fine.");
     }
-    fs.mkdirSync(userData + '/temp/image', { recursive: true });
+    await fs.mkdirSync(userData + '/temp/image', { recursive: true });
     let command = `curl -o ` + userData + `/temp/image/${filename}  ${uri}`;
-    let result = cp.execSync(command);
+    let result = await cp.execSync(command);
 };
 
 let manga;
@@ -128,7 +128,7 @@ ex_app.get('/profile', async function (req, res) {
             case 'KissManga':{
                 await getCover('https://kissmanga.org/mangaimage/' + link + '.jpg', 'cover.jpg')
                 fs.mkdirSync(userData + '/temp/manga/image', { recursive: true });
-                fs.copyFileSync(userData + '/temp/image/cover.jpg', userData + '/temp/manga/image/' + link + '.jpg');
+                await fs.copyFileSync(userData + '/temp/image/cover.jpg', userData + '/temp/manga/image/' + link + '.jpg');
                 manga = await scrapeMangaProfile('https://kissmanga.org/manga/' + link);
                 console.log("oki");
                 break;
