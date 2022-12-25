@@ -69,6 +69,7 @@ main.manga-main {
     align-items: flex-start;
     justify-content: left;
     margin: 0 auto;
+    flex-direction: column;
 }
 
 .manga {
@@ -223,7 +224,7 @@ header a:hover {
 }
 
 footer {
-    margin-top: 2rem;
+    margin-top: 3rem;
     color: #818181;
 }
 

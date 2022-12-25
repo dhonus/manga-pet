@@ -38,7 +38,9 @@
     </div>
   </header>
     <main class="manga-main">
-      <h2 class="message"><%= message %></h2>
+      <% if (message.length !== 0) { %>
+        <h2 class="message"><%= message %></h2>
+    <% } %>
       <div class="manga">
         <div class="manga-summary">
           <h1><%= manga.title %></h1>
