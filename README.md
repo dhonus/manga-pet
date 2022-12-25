@@ -23,13 +23,10 @@ You can opt to use the prebuilt windows binary in the releases section.
 If you wish to prepare the binary yourself, install all dependencies with npm  
 > npm install
 
-Run the app with
-> npm start
-
-Or using yarn
+And run with 
 > yarn start
 
-To build execute
+To build executables for windows or linux, run on the respective platform. Currently only support arch linux and windows, [here](https://www.electron.build/configuration/linux) is how to write your own build routine for other distributions.
 > yarn dist
 
 The installer will be generated into the dist directory.
