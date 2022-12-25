@@ -10,6 +10,9 @@ const rp = require('request-promise');
 const fs = require("fs");
 const cp = require("child_process");
 
+const {app}  = require('electron');
+const userData = app.getPath("userData")
+
 class Manga {
     constructor(short, title, summary, chapters, type){
         this.short = short
@@ -127,7 +130,7 @@ async function download(manga, manga_name){
         throw new Error('Invalid image type');
     }
     console.log(manga.order);
-    let command = `curl -o temp/manga/${manga_name}/${manga.order}${extension}  ${manga.manga}`;
+    let command = `curl -o ` + userData + `/temp/manga/${manga_name}/${manga.order}${extension}  ${manga.manga}`;
     console.log(command);
     let result = cp.execSync(command);
 }
@@ -169,11 +172,11 @@ async function scrapeMangaChapter(url){
             console.log(mangas);
 
             try {
-                await fs.rmSync('temp/manga/' + manga_name, { recursive: true });
+                await fs.rmSync(userData + '/temp/manga/' + manga_name, { recursive: true });
             } catch (e) {
                 console.log("Probably no temp/image folder. This should be fine.");
             }
-            fs.mkdirSync('temp/manga/' + manga_name, { recursive: true });
+            fs.mkdirSync(userData + '/temp/manga/' + manga_name, { recursive: true });
             // for each manga in mangas
             total = mangas.length;
             for (let i = 0; i < mangas.length; i++){

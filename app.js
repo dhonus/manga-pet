@@ -3,10 +3,14 @@ module.exports = {getCreds};
 const express = require('express')
 const bodyParser = require('body-parser');
 const helmet = require('helmet')
-const app = express();
+const ex_app = express();
+const {app}  = require('electron');
 const {sendEmail} = require("./src/mail");
 const fs = require('fs');
 const cp = require('child_process');
+
+const userData = app.getPath("userData")
+console.log(userData)
 
 // default credentials to overwrite on open
 let gmail = "";
@@ -15,39 +19,31 @@ let kindle = "";
 
 let message = "";
 
-// helmet setup
-app.use(
-    helmet({
-        contentSecurityPolicy: false,
-    })
-);
-app.disable('cross-origin-embedder-policy');
-
 // basic networking setup and includes
 
 const ejs = require('ejs');
 const {scrapeMangaProfile, scrapeMangaSearch, scrapeMangaChapter, getProgress} = require("./src/scraper");
 
 // more includes for the server
-app.use(express.static(__dirname + '/'));
-app.use(bodyParser.urlencoded({extend:true}));
-app.engine('html', ejs.renderFile);
-app.set('view engine', 'ejs');
-app.set('views', __dirname);
+ex_app.use(express.static(__dirname + '/'));
+ex_app.use(bodyParser.urlencoded({extend:true}));
+ex_app.engine('html', ejs.renderFile);
+ex_app.set('view engine', 'ejs');
+ex_app.set('views', __dirname);
 
 // create necessary files
-fs.appendFile("./.cred", '', function (err) {
+fs.appendFile(userData + "/.cred", '', function (err) {
     if (err) throw err;
 });
-fs.mkdirSync('./temp/manga_out', { recursive: true });
-const logfile = './temp/manga_out/log.manga';
+fs.mkdirSync(userData + '/temp/manga_out', { recursive: true });
+const logfile = userData + '/temp/manga_out/log.manga';
 fs.appendFile(logfile, '', function (err) {
     if (err) throw err;
     console.log('Saved!');
 });
 
 // home page
-app.get('/', (req, res) => {
+ex_app.get('/', (req, res) => {
     let recents = [];
     let info = "";
 
@@ -80,15 +76,15 @@ app.get('/', (req, res) => {
 
 
 
-app.post('/search', async function (req, res) {
+ex_app.post('/search', async function (req, res) {
     console.log("we are here");
     console.log(req);
-    app.use( bodyParser.json() );       // to support JSON-encoded bodies
-    app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    ex_app.use( bodyParser.json() );       // to support JSON-encoded bodies
+    ex_app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
         extended: true
     }));
-    app.use(express.json());       // to support JSON-encoded bodies
-    app.use(express.urlencoded()); // to support URL-encoded bodies
+    ex_app.use(express.json());       // to support JSON-encoded bodies
+    ex_app.use(express.urlencoded()); // to support URL-encoded bodies
 
     const manga_name = req.body.manga;
     let manga;
@@ -109,17 +105,17 @@ app.post('/search', async function (req, res) {
 
 let getCover = async function(uri, filename){
     try {
-        await fs.rmSync('./temp/image', { recursive: true });
+        await fs.rmSync(userData + '/temp/image', { recursive: true });
     } catch (e) {
         console.log("Probably no temp/image folder. This should be fine.");
     }
-    fs.mkdirSync('./temp/image', { recursive: true });
-    let command = `curl -o ./temp/image/${filename}  ${uri}`;
+    fs.mkdirSync(userData + '/temp/image', { recursive: true });
+    let command = `curl -o ` + userData + `/temp/image/${filename}  ${uri}`;
     let result = cp.execSync(command);
 };
 
 let manga;
-app.get('/profile', async function (req, res) {
+ex_app.get('/profile', async function (req, res) {
     try {
         // extract query parameters
         const type = req.query.type;
@@ -130,8 +126,8 @@ app.get('/profile', async function (req, res) {
         switch (type) {
             case 'KissManga':{
                 await getCover('https://kissmanga.org/mangaimage/' + link + '.jpg', 'cover.jpg')
-                fs.mkdirSync('./temp/manga/image', { recursive: true });
-                fs.copyFileSync('./temp/image/cover.jpg', './temp/manga/image/' + link + '.jpg');
+                fs.mkdirSync(userData + '/temp/manga/image', { recursive: true });
+                fs.copyFileSync(userData + '/temp/image/cover.jpg', userData + '/temp/manga/image/' + link + '.jpg');
                 manga = await scrapeMangaProfile('https://kissmanga.org/manga/' + link);
                 console.log("oki");
                 break;
@@ -146,24 +142,24 @@ app.get('/profile', async function (req, res) {
     }
 
     console.log(manga, "manga");
-    res.render("profile", {'manga': manga});
+    res.render("profile", {'manga': manga, 'userData': userData});
 });
 
 // DOWNLOADING MANGA
 async function convertToEpub(chapter_title, chapters) {
     const nodepub = require('nodepub');
     const fs = require('fs');
-    const img = fs.readdirSync('./temp/manga/test/');
+    const img = fs.readdirSync(userData + '/temp/manga/test/');
     let images = [];
     for (let i = 0; i < img.length; i++) {
-        images.push('./temp/manga/test/' + img[i]);
+        images.push(userData + '/temp/manga/test/' + img[i]);
     }
 
     console.log(img);
     console.log(images);
     const metadata = {
         id: manga.short,
-        cover: './temp/image/cover.jpg',
+        cover: userData + '/temp/image/cover.jpg',
         title: manga.title + " " + chapter_title,
         series: manga.title,
         sequence: 1,
@@ -188,7 +184,7 @@ async function convertToEpub(chapter_title, chapters) {
     file_out = file_out.replace(/ /g,"_");
     file_out = file_out.replace(/\W/g, '')
     file_out = file_out.replace(/_/g," ");
-    await epub.writeEPUB("./temp/manga_out/", file_out);
+    await epub.writeEPUB(userData + "/temp/manga_out/", file_out);
 
     // if file doesn't exist, create it
     fs.appendFile(logfile, '', function (err) {
@@ -229,7 +225,7 @@ async function convertToEpub(chapter_title, chapters) {
     return file_out;
 }
 
-app.get('/download', async function (req, res) {
+ex_app.get('/download', async function (req, res) {
     const type = req.query.type;
     const link = req.query.short;
     const chapter_title = req.query.title;
@@ -254,14 +250,14 @@ app.get('/download', async function (req, res) {
     res.render("profile", {'manga': manga});
 });
 
-app.post('/settings_set', async function (req, res) {
+ex_app.post('/settings_set', async function (req, res) {
     console.log(req);
-    app.use( bodyParser.json() );       // to support JSON-encoded bodies
-    app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    ex_app.use( bodyParser.json() );       // to support JSON-encoded bodies
+    ex_app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
         extended: true
     }));
-    app.use(express.json());       // to support JSON-encoded bodies
-    app.use(express.urlencoded()); // to support URL-encoded bodies
+    ex_app.use(express.json());       // to support JSON-encoded bodies
+    ex_app.use(express.urlencoded()); // to support URL-encoded bodies
 
     const gmail = req.body.gmail;
     const pass = req.body.pass;
@@ -303,7 +299,7 @@ app.post('/settings_set', async function (req, res) {
     });
 });
 
-app.get('/progress', function (req, res) {
+ex_app.get('/progress', function (req, res) {
     res.send({'progress': getProgress()});
 });
 
@@ -319,7 +315,7 @@ async function getCreds() {
     return {'gmail': parts[0], 'pass': parts[1], 'kindle': parts[2]};
 }
 
-app.get('/settings', async function (req, res) {
+ex_app.get('/settings', async function (req, res) {
 
     const creds = await getCreds();
     res.render("settings", {
@@ -332,7 +328,7 @@ app.get('/settings', async function (req, res) {
 });
 
 
-const server = app.listen(0, () => {
+const server = ex_app.listen(0, () => {
     console.log('Running client on port:', server.address().port);
 })
 

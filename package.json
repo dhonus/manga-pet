@@ -44,6 +44,10 @@
       "category": "mangapet.media.manga"
     },
     "icon": "./src/256x256.ico",
+    "files": [
+      "**/*",
+      "../temp/**/*"
+    ],
     "extraResources": [
       "temp"
     ]

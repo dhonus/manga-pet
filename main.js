@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, protocol, BrowserWindow } = require('electron')
 const path = require('path')
 const {sendEmail} = require("./src/mail");
 const {scrapeMangaProfile, scrapeMangaSearch, scrapeMangaChapter} = require("./src/scraper");
@@ -81,6 +81,7 @@ const createWindow = () => {
     icon: path.join(__dirname, 'src/256x256.png'),
     autoHideMenuBar: true,
     webPreferences: {
+      webSecurity: false,
       preload: path.join(__dirname, 'preload.js')
     }
   })
@@ -93,6 +94,12 @@ app.whenReady().then(() => {
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+  app.whenReady().then(() => {
+    protocol.registerFileProtocol('atom', (request, callback) => {
+      const filePath = url.fileURLToPath('file://' + request.url.slice('atom://'.length))
+      callback(filePath)
+    })
+  })
 })
 // https://kissmanga.org/manga_list?q=clannad&action=search
 // const url = 'https://kissmanga.org/manga/manga-hc959911';
@@ -103,6 +110,7 @@ let http = require('http');
 let nodemailer = require('nodemailer');
 const {response} = require("express");
 const ChildProcess = require("child_process");
+const url = require("url");
 
 //let ex_app = express();
 //const router = express.Router();
