@@ -8,34 +8,28 @@ const {app}  = require('electron');
 const {sendEmail} = require("./src/mail");
 const fs = require('fs');
 const cp = require('child_process');
-
-const userData = app.getPath("userData")
-console.log(userData)
+const ejs = require('ejs');
+const {scrapeMangaProfile, scrapeMangaSearch, scrapeMangaChapter, getProgress} = require("./src/scraper");
 
 // default credentials to overwrite on open
 let gmail = "";
 let pass = "";
 let kindle = "";
-
 let message = "";
 
-// basic networking setup and includes
-
-const ejs = require('ejs');
-const {scrapeMangaProfile, scrapeMangaSearch, scrapeMangaChapter, getProgress} = require("./src/scraper");
-
-// more includes for the server
+// set the view engine to ejs
 ex_app.use(express.static(__dirname + '/'));
 ex_app.use(bodyParser.urlencoded({extend:true}));
 ex_app.engine('html', ejs.renderFile);
 ex_app.set('view engine', 'ejs');
 ex_app.set('views', __dirname);
 
-// create necessary files
-fs.appendFile(userData + "/.cred", '', function (err) {
-    if (err) throw err;
-});
+// create necessary files if they weren't created somehow
+const userData = app.getPath("userData")
+fs.appendFile(userData + "/.cred", '', function (err) { if (err) throw err; });
 fs.mkdirSync(userData + '/temp/manga_out', { recursive: true });
+
+// this file has the recent manga
 const logfile = userData + '/temp/manga_out/log.manga';
 fs.appendFile(logfile, '', function (err) {
     if (err) throw err;
@@ -75,13 +69,9 @@ ex_app.get('/', (req, res) => {
     });
 })
 
-
-
 ex_app.post('/search', async function (req, res) {
-    console.log("we are here");
-    console.log(req);
     ex_app.use( bodyParser.json() );       // to support JSON-encoded bodies
-    ex_app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    ex_app.use(bodyParser.urlencoded( {     // to support URL-encoded bodies
         extended: true
     }));
     ex_app.use(express.json());       // to support JSON-encoded bodies
@@ -102,8 +92,7 @@ ex_app.post('/search', async function (req, res) {
     });
 });
 
-
-
+// downloads the cover for our manga and then keeps it in /temp/image
 let getCover = async function(uri, filename){
     try {
         await fs.rmSync(userData + '/temp/image', { recursive: true });
@@ -116,14 +105,14 @@ let getCover = async function(uri, filename){
 };
 
 let manga;
+// this is the page that shows a single manga
 ex_app.get('/profile', async function (req, res) {
     try {
         // extract query parameters
         const type = req.query.type;
         const link = req.query.link;
 
-        console.log("we are here", link, type);
-
+        // if we decide to support other sites, we can add them here
         switch (type) {
             case 'KissManga':{
                 await getCover('https://kissmanga.org/mangaimage/' + link + '.jpg', 'cover.jpg')
@@ -137,27 +126,23 @@ ex_app.get('/profile', async function (req, res) {
                 manga = null;
             }
         }
-
     } catch (e) {
         console.log(e);
     }
 
-    console.log(manga, "manga");
     res.render("profile", {'manga': manga, 'userData': userData, 'message': message});
 });
 
-// DOWNLOADING MANGA
+const nodepub = require('nodepub');
+
+// this is where we make the epub
 async function convertToEpub(chapter_title, chapters) {
-    const nodepub = require('nodepub');
-    const fs = require('fs');
     const img = fs.readdirSync(userData + '/temp/manga/test/');
     let images = [];
     for (let i = 0; i < img.length; i++) {
         images.push(userData + '/temp/manga/test/' + img[i]);
     }
 
-    console.log(img);
-    console.log(images);
     const metadata = {
         id: manga.short,
         cover: userData + '/temp/image/cover.jpg',
@@ -180,7 +165,7 @@ async function convertToEpub(chapter_title, chapters) {
     }
 
     // a better regex might be a good idea here
-    // fixes the output string in case a strange char is in there
+    // fixes the output string in case a strange char like a... "degree"... is in there and windows is like whaaaaat is dis
     let file_out = manga.title + " " + chapter_title;
     file_out = file_out.replace(/ /g,"_");
     file_out = file_out.replace(/\W/g, '')
@@ -202,6 +187,7 @@ async function convertToEpub(chapter_title, chapters) {
         });
     }
     else {
+        let recent_manga = [];
         // read all lines from file
         const data = fs.readFileSync(logfile, 'utf8');
         // split the contents by new line
@@ -215,17 +201,28 @@ async function convertToEpub(chapter_title, chapters) {
             if (parts[0] === manga.short && parts[1] === manga.type) {
                 found = true;
             }
+            else {
+                recent_manga.push(line);
+            }
+
         });
-        if (!found) {
-            fs.appendFile(logfile, manga.short + "," + manga.type + "," + "\n", function (err) {
+        if (found){
+            console.log("reordering");
+        }
+        fs.writeFileSync(logfile, manga.short + "," + manga.type + ",\n", function (err) {
+            if (err) throw err;
+        });
+        for (let i = 0; i < recent_manga.length; i++) {
+            fs.appendFile(logfile, recent_manga[i] + "\n", function (err) {
                 if (err) throw err;
-                console.log('Updated!');
             });
         }
+
     }
     return file_out;
 }
 
+// here we do the downloading of a chapter
 ex_app.get('/download', async function (req, res) {
     const type = req.query.type;
     const link = req.query.short;
@@ -238,7 +235,7 @@ ex_app.get('/download', async function (req, res) {
             const file = await convertToEpub(chapter_title);
             console.log(file, " is the file");
             await sendEmail(file).then(() => {
-                message = "The chapter" + chapter_title +" has been sent to your kindle.";
+                message = chapter_title + " has been sent to your kindle.";
                 console.log("Email sent");
             }).catch((error) => {
                 message = "There was an error with " + chapter_title + ". Err: " + error;
@@ -249,13 +246,12 @@ ex_app.get('/download', async function (req, res) {
         console.log(e);
     }
 
-    console.log(type, link);
     res.render("profile", {'manga': manga, 'userData': userData, 'message': message});
-    message = "";
+    message = ""; // wipe it
 });
 
+// this is used for updating settings
 ex_app.post('/settings_set', async function (req, res) {
-    console.log(req);
     ex_app.use( bodyParser.json() );       // to support JSON-encoded bodies
     ex_app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
         extended: true
@@ -274,7 +270,6 @@ ex_app.post('/settings_set', async function (req, res) {
             // write to file
             await fs.appendFile(userData + "/.cred", gmail + "," + pass + "," + kindle + "\n", function (err) {
                 if (err) throw err;
-                console.log('Updated!');
             });
         } else {
             // delete file
@@ -282,17 +277,15 @@ ex_app.post('/settings_set', async function (req, res) {
             // create empty
             await fs.appendFile(userData + "/.cred", '', function (err) {
                 if (err) throw err;
-                console.log('Saved!');
             });
             // write creds to file
             await fs.appendFile(userData + "/.cred", gmail + "," + pass + "," + kindle + "\n", function (err) {
                 if (err) throw err;
-                console.log('Updated!');
             });
         }
     }
 
-    console.log(gmail, pass, kindle);
+    console.log('Updated!');
 
     message = "Your credentials have been saved. You can now download manga.";
     res.render("settings", {
@@ -303,10 +296,12 @@ ex_app.post('/settings_set', async function (req, res) {
     });
 });
 
+// deprecated
 ex_app.get('/progress', function (req, res) {
     res.send({'progress': getProgress()});
 });
 
+// getter for credentials
 async function getCreds() {
     // read the first line of the file
     const data = fs.readFileSync(userData + "/.cred", 'utf8');
@@ -319,6 +314,7 @@ async function getCreds() {
     return {'gmail': parts[0], 'pass': parts[1], 'kindle': parts[2]};
 }
 
+// settings page
 ex_app.get('/settings', async function (req, res) {
 
     const creds = await getCreds();
@@ -331,7 +327,7 @@ ex_app.get('/settings', async function (req, res) {
     message = "";
 });
 
-
+// get a free port
 const server = ex_app.listen(0, () => {
     console.log('Running client on port:', server.address().port);
 })

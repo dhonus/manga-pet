@@ -17,7 +17,7 @@ ex_app.use(cors());
 ex_app.options('*', cors());
 
 
-//let server = http.createServer(ex_app);
+// this is where we store all user data
 const userData = app.getPath("userData")
 
 ex_app.use(express.json);
