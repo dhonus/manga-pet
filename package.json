@@ -1,5 +1,5 @@
 {
-  "name": "manga-pet",
+  "name": "manga.pet",
   "version": "1.1.4",
   "description": "Download and send manga directly to your kindle",
   "main": "main.js",
@@ -40,6 +40,7 @@
   },
   "build": {
     "appId": "manga-pet",
+    "productName": "manga.pet.",
     "mac": {
       "category": "mangapet.media.manga"
     },
@@ -52,6 +53,14 @@
         "StartupWMClass": "manga-pet",
         "icon": "manga-pet"
       }
+    },
+    "nsis": {
+      "oneClick": false,
+      "shortcutName": "manga.pet.",
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "license": "./LICENSE",
+      "installerSidebar": "src/side.bmp"
     },
     "icon": "./src/256x256.ico",
     "files": [
