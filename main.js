@@ -81,7 +81,7 @@ const createWindow = () => {
     icon: path.join(__dirname, 'src/256x256.png'),
     autoHideMenuBar: true,
     webPreferences: {
-      webSecurity: false,
+      webSecurity: true,
       preload: path.join(__dirname, 'preload.js')
     }
   })
