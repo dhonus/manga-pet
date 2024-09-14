@@ -30,7 +30,7 @@
     "cors": "^2.8.5",
     "ejs": "^3.1.8",
     "electron-squirrel-startup": "^1.0.0",
-    "express": "^4.18.2",
+    "express": "^4.20.0",
     "helmet": "^6.0.1",
     "nodemailer": "^6.8.0",
     "nodepub": "^3.0.8",
