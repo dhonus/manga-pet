@@ -19,7 +19,7 @@
     "@electron-forge/maker-flatpak": "^6.0.4",
     "@electron-forge/maker-squirrel": "^6.0.4",
     "@electron-forge/maker-zip": "^6.0.4",
-    "@types/nodemailer": "^6.4.7",
+    "@types/nodemailer": "^6.4.15",
     "electron": "^22.3.25",
     "electron-builder": "~22.10.5",
     "electron-builder-squirrel-windows": "^24.0.0-alpha.8"
@@ -32,7 +32,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "express": "^4.20.0",
     "helmet": "^6.0.1",
-    "nodemailer": "^6.9.9",
+    "nodemailer": "^6.9.15",
     "nodepub": "^3.0.8",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
