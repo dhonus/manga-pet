@@ -7,6 +7,9 @@ An application to download, convert and send manga to your kindle.
 
 </div>
 
+## Deprecation notice !!
+This app is no longer maintained. Kissmanga has been taken down and I have no plans to update this project to work with other sources. I made **a better replacement** - [kiyomi](https://github.com/dhonus/kiyomi) - which uses suwayomi or other sources to download manga from a much wider range of sources than just kissmanga.
+
 ## What does it do
 It is my own replacement for kmanga.net, which has been taken down.
 
@@ -27,8 +30,8 @@ Before you start using manga.pet. you should:
 ## Installation
 You can [download](https://github.com/dhonus/manga-pet/releases) the prebuilt windows executable in the releases section. 
 
-If you wish to prepare the binary yourself, install all dependencies with npm  
-> npm install
+If you wish to prepare the binary yourself, install all dependencies with yarn  
+> yarn install
 
 And run with 
 > yarn start
